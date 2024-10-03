@@ -1,0 +1,22 @@
+/* Home.css */
+.home {
+    background-image: url('C:/Users/Melek/Desktop/Tous les projet/site_coivoiturage_terminale/frontend/sitecoivoiturage/src/assets/car.jpg');
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9; /* Softer background for contrast */
+    color: #333; /* Ensure text readability */
+    
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* Full height of the viewport */
+    overflow: hidden; /* Prevent scrollbar */
+    position: relative; 
+}
+
+/* Additional global styles to prevent body scroll */
+body {
+    margin: 0; /* Remove body margin */
+    overflow: hidden; /* Prevent scrollbar for the body */
+}

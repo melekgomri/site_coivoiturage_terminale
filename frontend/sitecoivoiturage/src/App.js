@@ -1,12 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
-
+import Register from './Register'; // Import Register component
+import Contact from './Contact';
+import Home from './Home';
 
 function App() {
   return (
-    <Router>
+    
       <div className="App">
+        <BrowserRouter>
         <header className="navbar navbar-expand-lg navbar-light bg-light">
           <Link className="navbar-brand" to="/">Application de Covoiturage</Link>
           <div className="navbar-nav">
@@ -17,24 +20,24 @@ function App() {
             <Link className="nav-link" to="/login">Login</Link>
             <Link className="nav-link" to="/logout">Logout</Link>
             <Link className="nav-link" to="/contact">Contact Nous?</Link>
-            
           </div>
         </header>
 
         <div className="content">
           <Routes>
-            <Route path="/"  />
-            <Route path="/trajet"/>
-            <Route path="/reservations"/>
-            <Route path="/registration"/>
-            <Route path="/login"/>
-            <Route path="/logout"/>
-            <Route path="/contact"/>
-            <Route path="/avis"/>
+          <Route path="/" element={<Home />} /> 
+            <Route path="/trajet" />
+            <Route path="/reservations" />
+            <Route path="/registration" element={<Register />} /> {/* Register Route */}
+            <Route path="/login" />
+            <Route path="/logout" />
+            <Route path="/contact" element={<Contact/>}/>
+            <Route path="/avis" />
           </Routes>
         </div>
+        </BrowserRouter>
       </div>
-    </Router>
+     
   );
 }
 

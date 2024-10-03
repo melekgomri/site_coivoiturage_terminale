@@ -5,7 +5,6 @@ body {
   padding: 0;
   background-color: #f4f6f9; /* Softer background for contrast */
   color: #333; /* Ensure text readability */
-  background-image: url('C:/Users/Melek/Desktop/Tous les projet/site_coivoiturage_terminale/frontend/sitecoivoiturage/src/assets/car.jpg'); /* Local image path */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
