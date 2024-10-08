@@ -39,12 +39,15 @@ router.post('/login', async (req, res) => {
                 _id: user._id,
                 email: user.email,
                 name: user.name,
-                role: role // Ajout du rôle au payload
+                role: role 
             };
 
             const token = jwt.sign(payload, 'your_secret_key'); // Utilisez votre propre clé secrète
-            res.status(200).send({ token: token });
-        }
+            res.status(200).send({
+                token: token,
+                isAdmin: user.isAdmin,
+                isCovoitureur: user.isCovoitureur
+            });        }
     }
 });
 router.get('/count', async (req, res) => {
