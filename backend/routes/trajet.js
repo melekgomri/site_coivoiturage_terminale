@@ -84,4 +84,25 @@ router.get('/count', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+
+router.get('/getall/:userId', (req, res) => {
+    const userId = req.params.userId;
+
+    // Fetch all trajets where the conducteur field matches the userId
+    trajetschema.find({ conducteur: userId }) 
+    .then((trajets) => {
+        if (!trajets || trajets.length === 0) {
+            return res.status(404).send('No trajets found for this user');
+        }
+        res.status(200).send(trajets);
+    })
+    .catch((err) => {
+        res.status(500).send({ error: 'Error fetching trajets for this user', details: err });
+    });
+});
+
+
+
+
 module.exports=router;
