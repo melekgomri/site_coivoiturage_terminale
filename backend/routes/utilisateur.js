@@ -43,7 +43,9 @@ router.post('/login', async (req, res) => {
             };
 
             const token = jwt.sign(payload, 'your_secret_key'); // Utilisez votre propre clé secrète
+            console.log("user id: " + user._id);
             res.status(200).send({
+                _id : user._id,
                 token: token,
                 isAdmin: user.isAdmin,
                 isCovoitureur: user.isCovoitureur
