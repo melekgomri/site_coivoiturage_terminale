@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+
 const trajetschema=new mongoose.Schema({
     place:String,
     depart:Number,
@@ -6,6 +7,6 @@ const trajetschema=new mongoose.Schema({
     datedapart:Date,
     placedisponible:Number,
     cout:Number,
-    conducteur:{type:mongoose.Schema.Types.ObjectId,ref:'User'},
+    conducteur:{type:mongoose.Schema.Types.ObjectId,ref:'Utilisateur'},
 });
 module.exports=mongoose.model('trajet',trajetschema);

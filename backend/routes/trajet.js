@@ -32,10 +32,11 @@ router.delete('/delete/:id',(req,res)=>{
 router.get('/getbyid/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const trajet = await trajetschema.findById(id);
+        const trajet = await trajetschema.findById(id).populate('conducteur');;
         res.send(trajet);
     } catch (err) {
         res.status(500).send(err);
+        console.error(err);
     }
 });
 
@@ -101,6 +102,7 @@ router.get('/getall/:userId', (req, res) => {
         res.status(500).send({ error: 'Error fetching trajets for this user', details: err });
     });
 });
+
 
 
 
