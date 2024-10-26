@@ -118,7 +118,17 @@ router.get('/count', async (req, res) => {
 
 
 
-
+router.get('/covoitureur/:covoitureurId', async (req, res) => {
+    try {
+        const covoitureurId = req.params.covoitureurId;
+        console.log(covoitureurId);
+        const reservations = await reservationschema.find({ covoitureur: covoitureurId });
+        console.log(reservations)
+        res.status(200).send(reservations);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
 
 
 module.exports=router;
