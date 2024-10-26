@@ -1,6 +1,7 @@
 const express=require('express')
 const router=express.Router();
 const reservationschema=require('../models/reservation');
+const User = require('../models/utilisateur'); 
 router.post('/addreservation',(req,res)=>{
     data=req.body;
     Util=new reservationschema(data);
@@ -122,11 +123,12 @@ router.get('/covoitureur/:covoitureurId', async (req, res) => {
     try {
         const covoitureurId = req.params.covoitureurId;
         console.log(covoitureurId);
-        const reservations = await reservationschema.find({ covoitureur: covoitureurId });
+        const reservations = await reservationschema.find({ covoitureur: covoitureurId }).populate("passager");
         console.log(reservations)
         res.status(200).send(reservations);
     } catch (err) {
         res.status(400).send(err);
+        console.log(err)
     }
 });
 
