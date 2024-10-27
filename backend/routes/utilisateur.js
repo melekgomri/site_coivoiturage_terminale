@@ -48,6 +48,8 @@ router.post('/login', async (req, res) => {
                 _id : user._id,
                 token: token,
                 isAdmin: user.isAdmin,
+                name : user.name,
+                lastname : user.lastname,
                 isCovoitureur: user.isCovoitureur
             });        }
     }
@@ -89,20 +91,23 @@ router.put('/update/:id',(req,res)=>{
         }
     )
 })
-router.delete('/delete/:id',(req,res)=>{
-    id=req.params.id
-    Utilisateur.findByIdAndDelete({ _id:id })
-    .then(
-        (deleteuser)=>{
-            res.send(deleteuser)
+router.delete('/delete/:id', async (req, res) => {
+    const { id } = req.params; // Destructure id from params
+
+    try {
+        const deletedUser = await Utilisateur.findByIdAndDelete(id); // Pass id directly
+        
+        if (!deletedUser) {
+            return res.status(404).send({ message: "User not found" });
         }
-    )
-    .catch(
-        (err)=>{
-            res.send(err)
-        }
-    )
-})
+        
+        res.status(200).send({ message: "User deleted successfully", user: deletedUser });
+    } catch (error) {
+        res.status(500).send({ message: "Error deleting user", error: error.message });
+    }
+});
+
+
 router.get('/getbyid/:id',(req,res)=>{
     myid=req.params.id;
     Utilisateur.findOne({_id: myid})

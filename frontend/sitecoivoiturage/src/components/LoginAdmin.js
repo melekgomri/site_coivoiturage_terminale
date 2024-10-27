@@ -19,18 +19,18 @@ const LoginAdmin = () => {
           password: values.password,
         });
     
-        const { _id, token, isAdmin } = response.data;
+        const { _id, token, isAdmin , name , lastname} = response.data;
     
         // Store user ID and token in local storage
         localStorage.setItem("userId", _id);  
         localStorage.setItem("token", token);
+        localStorage.setItem("name" , name)
+        localStorage.setItem("lastname" , lastname)
     
         // Navigate based on user role
         if (isAdmin) {
           navigate("/admin-dashboard"); // Route for admin
-        } else {
-          navigate("/user-dashboard"); // Route for regular users
-        }
+        } 
     
         message.success("Login successful");
       } catch (error) {
