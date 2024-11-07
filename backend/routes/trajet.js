@@ -1,6 +1,8 @@
 const express=require('express')
 const router=express.Router();
+const mongoose = require('mongoose');
 const trajetschema=require('../models/trajet');
+const reservationSchema=require('../models/reservation')
 router.post('/addtrajet',(req,res)=>{
     data=req.body;
     traj=new trajetschema(data);
@@ -15,20 +17,28 @@ router.post('/addtrajet',(req,res)=>{
         }
     )
 })
-router.delete('/delete/:id',(req,res)=>{
-    id=req.params.id
-    trajetschema.findByIdAndDelete({ _id:id })
-    .then(
-        (deletetrajet)=>{
-            res.send(deletetrajet)
+
+router.delete('/delete/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find and delete the trajet
+        const deletedTrajet = await trajetschema.findByIdAndDelete(id);
+
+        if (!deletedTrajet) {
+            return res.status(404).send({ message: 'Trajet not found' });
         }
-    )
-    .catch(
-        (err)=>{
-            res.send(err)
-        }
-    )
-})
+
+        // Delete all reservations related to the deleted trajet
+        await reservationSchema.deleteMany({ trajet: id });
+
+        // Send the deleted trajet as a response
+        res.status(200).send(deletedTrajet);
+    } catch (err) {
+        console.error('Error deleting trajet:', err);
+        res.status(400).send({ message: 'Error deleting trajet and associated reservations', error: err });
+    }
+});
 router.get('/getbyid/:id', async (req, res) => {
     const id = req.params.id;
     try {
