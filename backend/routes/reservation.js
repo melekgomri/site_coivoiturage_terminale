@@ -1,6 +1,8 @@
 const express=require('express')
 const router=express.Router();
+const mongoose = require('mongoose');
 const reservationschema=require('../models/reservation');
+const trajetschema = require('../models/trajet');
 const User = require('../models/utilisateur'); 
 router.post('/addreservation',(req,res)=>{
     data=req.body;
@@ -80,15 +82,40 @@ router.get('/getbydate/:date', async (req, res) => {
         res.status(400).send(err);
     }
 });
-router.put('/confirm-reservation/:id', async (req, res) => {
+router.patch('/confirm-reservation/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const updatedReservation = await reservationschema.findByIdAndUpdate(id, { confirmed: true }, { new: true });
-        res.status(200).send(updatedReservation);
+
+        // Validate if the id is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).send({ message: 'Invalid reservation ID' });
+        }
+
+        const reservation = await reservationschema.findById(id);
+        if (!reservation) {
+            return res.status(404).send({ message: 'Reservation not found' });
+        }
+
+        const trajet = await trajetschema.findById(reservation.trajet);
+        if (!trajet) {
+            return res.status(404).send({ message: 'Trajet not found' });
+        }
+
+        if (trajet.placedisponible > 0) {
+            trajet.placedisponible -= 1;
+            await trajet.save();
+            reservation.confirmed = true;
+            const updatedReservation = await reservation.save();
+            res.status(200).send(updatedReservation);
+        } else {
+            res.status(400).send({ message: 'No available places left on this trajet' });
+        }
     } catch (err) {
-        res.status(400).send(err);
+        console.error('Error confirming reservation:', err); // Log the error
+        res.status(400).send({ message: 'Error confirming reservation', error: err });
     }
 });
+
 
 router.put('/cancel-reservation/:id', async (req, res) => {
     try {

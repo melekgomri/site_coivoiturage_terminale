@@ -6,6 +6,7 @@ const UtilisateurSchema = new mongoose.Schema({
     age: Number,
     email: String,
     password: String,
+    phone: String,
     isAdmin: { type: Boolean, default: false }, // Champ pour le rôle admin
     isCovoitureur: { type: Boolean, default: false } // Champ pour le rôle covoitureur
 });

@@ -1,9 +1,9 @@
 const mongoose=require('mongoose');
 
 const trajetschema=new mongoose.Schema({
-    place:String,
-    depart:Number,
-    arrive:Number,
+    from:String,
+    to:String,
+    depart:String,
     datedapart:Date,
     placedisponible:Number,
     cout:Number,
