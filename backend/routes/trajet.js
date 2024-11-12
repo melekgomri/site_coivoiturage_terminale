@@ -72,21 +72,21 @@ router.get('/places',(req,res)=>{
     });
 });
 
-router.put('/update/:id',(req,res)=>{
-    id=req.params.id;
-    newdata=req.body;
-    trajetschema.findByIdAndUpdate({_id : id},newdata)
-    .then(
-        (update)=>{
-            res.send(update)
-        }
-    )
-    .catch(
-        (err)=>{
-            res.send(err)
-        }
-    )
-})
+// Example with Express.js (Backend)
+router.patch('/update/:id', (req, res) => {
+    const id = req.params.id;  
+    const updatedData = req.body;  
+  
+    
+    trajetschema.updateOne({ _id: id }, updatedData)
+      .then(result => {
+        res.status(200).json({ message: 'Trajet updated successfully', result });
+      })
+      .catch(err => {
+        res.status(500).json({ message: 'Failed to update trajet', error: err });
+      });
+  });
+  
 router.get('/count', async (req, res) => {
     try {
         const count = await trajetschema.countDocuments();
