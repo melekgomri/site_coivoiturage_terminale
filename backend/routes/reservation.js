@@ -160,6 +160,56 @@ router.get('/covoitureur/:covoitureurId', async (req, res) => {
         console.log(err)
     }
 });
+router.get('/passager/:passagerId', async (req,res)=>{
+    try {
+        const passagerId = req.params.passagerId;
+        console.log(passagerId);
+        const reservations = await reservationschema.find({ passager: passagerId })
+        .populate("covoitureur")
+        .populate("trajet");
+        console.log(reservations)
+        res.status(200).send(reservations); 
+    } catch (err) {
+        res.status(400).send(err);
+        console.log(err)
+    }
+})
+
+
+//Annulation de réservation par le passager 
+router.put('/annuler/:id/resetStatus', async (req, res) => {
+   
+        const reservationId = req.params.id;
+        const userId = req.body.userId; // Supposons que vous obtenez l'ID de l'utilisateur qui annule
+    
+        try {
+            // Trouvez la réservation par ID
+            const reservation = await reservationschema.findById(reservationId);
+            if (!reservation) {
+                return res.status(404).send('Réservation non trouvée');
+            }
+    
+            // Vérifiez qui est l'utilisateur qui annule la réservation
+            if (reservation.passager.toString() === userId) {
+                reservation.annuleePar = 'passager'; // Le passager annule
+            } else if (reservation.covoitureur.toString() === userId) {
+                reservation.annuleePar = 'covoitureur'; // Le covoitureur annule
+            }
+    
+            // Mettez à jour les autres champs
+            reservation.cancelled = true;
+            reservation.annulee = true;
+    
+            // Sauvegardez la réservation mise à jour
+            const updatedReservation = await reservation.save();
+            res.status(200).json(updatedReservation);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Erreur du serveur');
+        }
+
+    
+});
 
 
 module.exports=router;
