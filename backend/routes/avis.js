@@ -29,10 +29,23 @@ router.get('/getbyid/:id',(req,res)=>{
         }
     )
 })
-router.get('/count', async (req, res) => {
+router.get('/count/:covoitureurId', async (req, res) => {
     try {
-        const count = await avisschema.countDocuments();
+        const covoitureurId = req.params.covoitureurId;
+        const count = await avisschema.countDocuments({ covoitureur: covoitureurId });
         res.status(200).json({ count: count });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.get('/reviews/:covoitureurId', async (req, res) => {
+    try {
+        const covoitureurId = req.params.covoitureurId; 
+        const reviews = await avisschema.find({ covoitureur: covoitureurId })
+        .populate('auteur', 'name lastname')  // Populate the 'auteur' field (assumes 'auteur' is a reference to 'Utilisateur')
+            .populate('covoitureur', 'lastname'); ; 
+        res.status(200).json(reviews); 
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
