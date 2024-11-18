@@ -156,6 +156,16 @@ router.put('/change-password/:id', async (req, res) => {
     }
 });
 
+router.get('/covoitureurs/all', async (req, res) => {
+    Utilisateur.find({ isCovoitureur: true }) 
+        .then((utilisateurs) => {
+            res.status(200).send(utilisateurs); 
+        })
+        .catch((err) => {
+            res.status(500).send({ error: err.message }); 
+        });
+})
+
 
 
 
